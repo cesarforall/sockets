@@ -1,5 +1,6 @@
 package servidor;
 
+import java.util.Random;
 
 public class ServicioPass {
 	private RequisitosPass requisitosPass;
@@ -62,4 +63,17 @@ public class ServicioPass {
 		return "!@#$%^&*()_-+=.:?";
 	}
 	
+	private String desorderString(String string) {
+		String desorderedString = "";
+		Random rand = new Random();
+		StringBuilder stringBuilder = new StringBuilder(string);
+		
+		while (stringBuilder.length() > 0) {
+			int randomIndex = rand.nextInt(stringBuilder.length());
+			desorderedString += stringBuilder.charAt(randomIndex);
+			stringBuilder.deleteCharAt(randomIndex);
+		}
+		
+		return desorderedString;
+	}
 }
