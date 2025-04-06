@@ -3,11 +3,7 @@ package servidor;
 import java.util.Random;
 
 public class ServicioPass {
-	private RequisitosPass requisitosPass;
-	private String minusculas;
-	private String mayusculas;
-	private String digitos;
-	private String carEspeciales;
+	private RequisitosPass requisitosPass;	
 	
 	public ServicioPass(int numMinusculas, int numMayusculas, int numDigitos, int numCarEspeciales) {
 		requisitosPass = new RequisitosPass();
@@ -18,7 +14,14 @@ public class ServicioPass {
 	}
 	
 	public String generaPass() {
-		return "";
+		StringBuilder stringbuilder = new StringBuilder();
+		
+		stringbuilder.append(desorderString(getMinusculasString()).substring(0, requisitosPass.getNumMinusculas()));
+		stringbuilder.append(desorderString(getMayusculasString()).substring(0, requisitosPass.getNumMayusculas()));
+		stringbuilder.append(desorderString(getDigitosString()).substring(0, requisitosPass.getNumDigitos()));
+		stringbuilder.append(desorderString(getCarEspecialesString()).substring(0,requisitosPass.getNumCaractEspeciales()));
+						
+		return desorderString(stringbuilder.toString());
 	}
 	
 	public int longitudPass() {
