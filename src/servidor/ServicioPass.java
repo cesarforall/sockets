@@ -9,8 +9,12 @@ public class ServicioPass {
 	private String digitos;
 	private String carEspeciales;
 	
-	public ServicioPass() {
-		
+	public ServicioPass(int numMinusculas, int numMayusculas, int numDigitos, int numCarEspeciales) {
+		requisitosPass = new RequisitosPass();
+		requisitosPass.setNumMinusculas(numMinusculas);
+		requisitosPass.setNumMayusculas(numMayusculas);
+		requisitosPass.setNumDigitos(numDigitos);
+		requisitosPass.setNumCaractEspeciales(numCarEspeciales);
 	}
 	
 	public String generaPass() {
@@ -18,7 +22,13 @@ public class ServicioPass {
 	}
 	
 	public int longitudPass() {
-		return 0;
+		int longitud = 0;
+		longitud += requisitosPass.getNumMinusculas();
+		longitud += requisitosPass.getNumMayusculas();
+		longitud += requisitosPass.getNumDigitos();
+		longitud += requisitosPass.getNumCaractEspeciales();
+		
+		return longitud;
 	}
 	
 	private String getMinusculasString() {		
