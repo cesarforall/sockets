@@ -16,7 +16,7 @@ public class Servidor {
 		serverSocket = new ServerSocket(PUERTO, 50, InetAddress.getLoopbackAddress());
 	}
 	
-	public void iniciarServidor() throws IOException {
+	public void start() throws IOException {
 		System.out.println("Se ha iniciado el servidor.");
 		System.out.println("Esperando la conexión del cliente...");
 		try {
