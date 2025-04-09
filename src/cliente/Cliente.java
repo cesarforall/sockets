@@ -48,6 +48,7 @@ public class Cliente {
 			String inputConsola = "";
 			String mensaje = "";
 			
+			// Lee y responde en bucle
 			while (true) {			
 				mensaje = mensajeServidor.readUTF();
 				
