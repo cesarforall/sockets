@@ -19,9 +19,11 @@ public class Servidor {
 	public void start() throws IOException {
 		System.out.println("Se ha iniciado el servidor.");
 		System.out.println("Esperando la conexión del cliente...");
-		try {
-			while (true) {				
-				Socket socket = serverSocket.accept();
+		while (true) {
+			try (Socket socket = serverSocket.accept()) {
+				DataOutputStream mensajeSalida = new DataOutputStream(socket.getOutputStream());
+				DataInputStream mensajeEntrada = new DataInputStream(socket.getInputStream());
+				
 				System.out.println("Cliente conectado desde" + socket.getLocalSocketAddress());				
 				
 				String nombre = "";
@@ -32,15 +34,28 @@ public class Servidor {
 				
 				ServicioPass servicioPass;
 				
-				DataOutputStream mensajeSalida = new DataOutputStream(socket.getOutputStream());
-				DataInputStream mensajeEntrada = new DataInputStream(socket.getInputStream());
-				
 				mensajeSalida.writeUTF("Hola, soy un servidor.\n¿Cuál es tu nombre?");
 				nombre = mensajeEntrada.readUTF();
 				System.out.println("Nombre del cliente: " + nombre);
 				
 				mensajeSalida.writeUTF("Te doy la bienvenida " + nombre + ".\nVoy a solicitar algunos requisitos para generar la contraseña.\n¿Cuántas mínusculas debe incluir?");
-				numMinusculas = Integer.parseInt(mensajeEntrada.readUTF());
+				try {				        
+			        numMinusculas = Integer.parseInt(mensajeEntrada.readUTF());				        
+			        
+			        if (numMinusculas > 0) {
+			        	
+			        } else {
+			            mensajeSalida.writeUTF("La cantidad debe ser un número positivo.");			            
+			            socket.close();
+			            System.out.println("Error en introducción de datos. Sesión terminada con el cliente.");
+			            continue;
+			        }
+			    } catch (Exception e) {				        
+			        mensajeSalida.writeUTF("La cantidad debe ser un número válido.");
+			        System.out.println("Error en la introducción de datos. La sesión con el cliente ha sido terminada.");
+			        socket.close();
+			        continue;
+			    }
 				
 				mensajeSalida.writeUTF("¿Cuántas mayúsculas debe tener?");
 				numMayusculas = Integer.parseInt(mensajeEntrada.readUTF());
@@ -57,7 +72,9 @@ public class Servidor {
 				mensajeSalida.writeUTF("La longitud de la contraseña que se va a generar es de " + servicioPass.longitudPass() + " caracteres.\n¿Quieres generar una contraseña ahora? [sí/no]");
 				System.out.println("Se ha enviado la longitud de la contraseña al cliente");
 				
-				if (mensajeEntrada.readUTF().equals("sí")) {
+				String mensaje = mensajeEntrada.readUTF();
+				
+				if (mensaje.equals("s") || mensaje.equals("sí") || mensaje.equals("si")) {
 					mensajeSalida.writeUTF("La contraseña generada es: " + servicioPass.generaPass());
 					System.out.println("Se ha enviado la contraseña al cliente");
 				} else {
@@ -65,12 +82,12 @@ public class Servidor {
 					System.out.println("El cliente no desea generar una contraseña");
 				}
 				
+				System.out.println("Sesión terminada con el cliente.");
 				socket.close();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			serverSocket.close();
-		}	
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}	
+		}
 	}
 }
