@@ -16,7 +16,7 @@ public class Cliente {
 		// socket = new Socket(HOST, PUERTO);
 	}
 	
-	public void interactuar() throws IOException {
+	public void interactua() throws IOException {
 		Scanner scanner = new Scanner(System.in);
 		
 		// Reintentar conexión en caso de que el servidor no esté disponible
